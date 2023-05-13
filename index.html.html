@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Canvas Demo</title>
+    <style>
+        canvas {
+
+            position: absolute;
+            top: 7rem;
+            left: 10re, ;
+            border: 1px solid red;
+        }
+
+        body {
+            overflow-y: hidden;
+        }
+
+        .parent {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #resetButton {
+            position: absolute;
+            bottom: 7.5rem;
+            right: 16rem;
+            width: 8rem;
+            height: 3rem;
+        }
+
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="parent">
+        <h1> Bubble Appp</h1>
+        <canvas id="myCanvas"></canvas>
+
+    </div>
+    <button id="resetButton">Reset</button>
+
+    <script>
+        var canvas = document.getElementById("myCanvas");
+
+        var ctx = canvas.getContext("2d");
+
+        canvas.width = 500;
+        canvas.height = 500;
+
+// <<<<<<<<<<<<<<<==========================drawing circles ================================>>>>>>>>>>>>>
+        var circleRadius = 30;
+        var circleSpacing = 50;
+        ctx.beginPath();
+        ctx.arc(100, 50, circleRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "red";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(100, 100 + circleSpacing, circleRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "green";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(100, 150 + circleSpacing * 2, circleRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "blue";
+        ctx.fill();
+
+        ctx.beginPath();
+        ctx.arc(100, 200 + circleSpacing * 3, circleRadius, 0, 2 * Math.PI);
+        ctx.fillStyle = "orange";
+        ctx.fill();
+
+
+// <<<<<<<<<<<<<<<==========================drawing Arrows ================================>>>>>>>>>>>>>
+
+
+        var arrowStartX = canvas.width - 150;
+        var arrowEndX = canvas.width - 50;
+        var arrowY1 = 50;
+        var arrowY2 = 100 + circleSpacing;
+        var arrowY3 = 150 + circleSpacing * 2;
+        var arrowY4 = 200 + circleSpacing * 3;
+
+        ctx.beginPath();
+        ctx.moveTo(arrowStartX, arrowY1);
+        ctx.lineTo(arrowEndX, arrowY1);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(arrowStartX, arrowY2);
+        ctx.lineTo(arrowEndX, arrowY2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(arrowStartX, arrowY3);
+        ctx.lineTo(arrowEndX, arrowY3);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(arrowStartX, arrowY4);
+        ctx.lineTo(arrowEndX, arrowY4);
+        ctx.stroke();
+
+        // <========================== CLICK CIRCLE AND MOVE TOWARDS CICLE ARROW ============================================>
+
+        // Get the canvas element
+        var canvas = document.getElementById("myCanvas");
+
+        // Set the context of the canvas
+        var ctx = canvas.getContext("2d");
+
+
+        let start1 = canvas.width - 150;
+        let end1 = canvas.width - 50
+
+        function moveArrowOne() {
+            ctx.clearRect(start1, arrowY1 - circleRadius, end1 - start1, circleRadius * 2);
+
+            start1 -= 60;
+            end1 -= 60;
+
+
+            ctx.beginPath();
+            ctx.moveTo(start1, arrowY1);
+            ctx.lineTo(end1, arrowY1);
+            ctx.stroke();
+        }
+
+
+
+        let start2 = canvas.width - 150;
+        let end2 = canvas.width - 50
+
+        function moveArrowTwo() {
+            ctx.clearRect(start2, arrowY2 - circleRadius, end2 - start2, circleRadius * 2);
+
+            start2 -= 60;
+            end2 -= 60
+
+            ctx.beginPath();
+            ctx.moveTo(start2, arrowY2);
+            ctx.lineTo(end2, arrowY2);
+            ctx.stroke();
+        }
+
+        let start3 = canvas.width - 150;
+        let end3 = canvas.width - 50
+
+
+        function moveArrowThree() {
+            ctx.clearRect(start3, arrowY3 - circleRadius, end3 - start3, circleRadius * 2);
+            start3 -= 60;
+            end3 -= 60;
+
+            ctx.beginPath();
+            ctx.moveTo(start3, arrowY3);
+            ctx.lineTo(end3, arrowY3);
+            ctx.stroke();
+        }
+
+
+        let start4 = canvas.width - 150;
+        let end4 = canvas.width - 50
+
+        function moveArrowFour() {
+            ctx.clearRect(start4, arrowY4 - circleRadius, end4 - start4, circleRadius * 2);
+            start4 -= 60;
+            end4 -= 60
+            ctx.beginPath();
+            ctx.moveTo(start4, arrowY4);
+            ctx.lineTo(end4, arrowY4);
+            ctx.stroke();
+        }
+
+
+
+
+        // flag variabe
+        let win = true;
+
+
+        // <========================= I added event listner to all circles by Event delegation  technique===========================>>>>>>>>>>>>
+        document.getElementsByTagName("canvas")[0].addEventListener("click", (e) => {
+            var rect = canvas.getBoundingClientRect();
+            var mouseX = e.clientX - rect.left;
+            var mouseY = e.clientY - rect.top;
+
+
+            // if any arrow touch circle and you try to move antother cirle it will not move 
+            // to stop another move i checked here
+
+            if (win) {
+                if (
+                    mouseX >= 70 && mouseX <= 130 &&
+                    mouseY >= 20 && mouseY <= 80
+                ) {
+                    console.log("Clicked on the first circle");
+                    moveArrowOne();
+                    if (checkCollision(100, 50, start1, end1, arrowY1)) {
+                        console.log("Collision detected with the first circle");
+                        ctx.clearRect(70, 20, 60, 60);
+                        ctx.beginPath();
+                        ctx.arc(100, 50, circleRadius, 0, 2 * Math.PI);
+                        ctx.fillStyle = "gray";
+                        ctx.fill();
+                        win=false
+
+                    }
+                } else if (
+                    mouseX >= 70 && mouseX <= 130 &&
+                    mouseY >= 70 && mouseY <= 130 + circleSpacing
+                ) {
+                    console.log("Clicked on the second circle");
+                    moveArrowTwo();
+                    if (checkCollision(100, 100 + circleSpacing, start2, end2, arrowY2)) {
+                        console.log("Collision detected with the second circle");
+
+                        ctx.clearRect(70, 70, 60, 60);
+                        ctx.beginPath();
+                        ctx.arc(100, 100 + circleSpacing, circleRadius, 0, 2 * Math.PI);
+                        ctx.fillStyle = "gray";
+                        ctx.fill();
+                        win=false
+                    }
+                } else if (
+                    mouseX >= 70 && mouseX <= 130 &&
+                    mouseY >= 120 + circleSpacing * 2 && mouseY <= 180 + circleSpacing * 2
+                ) {
+                    console.log("Clicked on the third circle");
+                    moveArrowThree();
+                    if (checkCollision(100, 150 + circleSpacing * 2, start3, end3, arrowY3)) {
+                        console.log("Collision detected with the third circle");
+                        ctx.clearRect(70, 120 + circleSpacing * 2, 60, 60);
+                        ctx.beginPath();
+                        ctx.arc(100, 150 + circleSpacing * 2, circleRadius, 0, 2 * Math.PI);
+                        ctx.fillStyle = "gray"; // Change the color to gray
+                        ctx.fill();
+                        win=false
+                    }
+                } else if (
+                    mouseX >= 70 && mouseX <= 130 &&
+                    mouseY >= 170 + circleSpacing * 3 && mouseY <= 230 + circleSpacing * 3
+                ) {
+                    console.log("Clicked on the fourth circle");
+                    moveArrowFour();
+                    if (checkCollision(100, 200 + circleSpacing * 3, start4, end4, arrowY4)) {
+                        console.log("Collision detected with the fourth circle");
+                        ctx.clearRect(70, 170 + circleSpacing * 3, 60, 60);
+                        ctx.beginPath();
+                        ctx.arc(100, 200 + circleSpacing * 3, circleRadius, 0, 2 * Math.PI);
+                        ctx.fillStyle = "gray"; // Change the color to gray
+                        ctx.fill();
+                        win=false
+                    }
+                }
+            }else{
+                alert("reset App  to continue this game");
+            }
+
+
+        });
+
+
+
+        //  <<<<<<<<<<<<<<<<================================Detecting colution===========================>>>>>>>>>>>>>>>>>>>>>>>>
+        function checkCollision(circleX, circleY, arrowStartX, arrowEndX, arrowY) {
+            var arrowMinX = Math.min(arrowStartX, arrowEndX);
+            var arrowMaxX = Math.max(arrowStartX, arrowEndX);
+            var arrowMinY = arrowY - circleRadius;
+            var arrowMaxY = arrowY + circleRadius;
+
+            if (
+                circleX + circleRadius >= arrowMinX &&
+                circleX - circleRadius <= arrowMaxX &&
+                circleY + circleRadius >= arrowMinY &&
+                circleY - circleRadius <= arrowMaxY
+            ) {
+                return true; // Collision detected
+            } else {
+                return false; // No collision
+            }
+        }
+
+
+
+        // <==================================for resetting to inisital state=========================>>>>>>>>>>>>>>>>>>>>>
+
+        document.getElementById("resetButton").addEventListener("click", () => {
+            win=true
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.width = 500;
+            canvas.height =500;
+
+            var circleRadius = 30;
+            var circleSpacing = 50;
+            ctx.beginPath();
+            ctx.arc(100, 50, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = "red";
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(100, 100 + circleSpacing, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = "green";
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(100, 150 + circleSpacing * 2, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = "blue";
+            ctx.fill();
+
+            ctx.beginPath();
+            ctx.arc(100, 200 + circleSpacing * 3, circleRadius, 0, 2 * Math.PI);
+            ctx.fillStyle = "orange";
+            ctx.fill();
+
+            arrowStartX = canvas.width - 150;
+            arrowEndX = canvas.width - 50;
+            arrowY1 = 50;
+            arrowY2 = 100 + circleSpacing;
+            arrowY3 = 150 + circleSpacing * 2;
+            arrowY4 = 200 + circleSpacing * 3;
+
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowY1);
+            ctx.lineTo(arrowEndX, arrowY1);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowY2);
+            ctx.lineTo(arrowEndX, arrowY2);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowY3);
+            ctx.lineTo(arrowEndX, arrowY3);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(arrowStartX, arrowY4);
+            ctx.lineTo(arrowEndX, arrowY4);
+            ctx.stroke();
+            drawShapes()
+        });
+        window.addEventListener("resize", drawShapes);
+    </script>
+</body>
+
+</html>
